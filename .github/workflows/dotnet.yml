@@ -57,4 +57,5 @@ jobs:
 
     - name: Check if a fatal error occurred in syslog
       run: |
-        cat /var/log/syslog | not grep "A fatal error was encountered. Could not extract contents of the bundle"
+        set -e
+        ! cat /var/log/syslog | grep "A fatal error was encountered. Could not extract contents of the bundle"
