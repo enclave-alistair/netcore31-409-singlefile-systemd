@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix: 
-        sdk-minor-version: [ 401, 409 ]
+        sdk-minor-version: [ 401, 402, 403, 404, 405, 406, 407, 408, 409 ]
         
     steps:
     - uses: actions/checkout@v2
@@ -57,4 +57,4 @@ jobs:
 
     - name: Check if a fatal error occurred in syslog
       run: |
-        cat /var/log/syslog | not grep "A fatal error was encountered. Could not extract contents of the bundle""
+        cat /var/log/syslog | not grep "A fatal error was encountered. Could not extract contents of the bundle"
