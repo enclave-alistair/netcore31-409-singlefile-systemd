@@ -11,15 +11,48 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix: 
+        sdk-minor-version: [ 401, 409 ]
+        
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.409'
+        dotnet-version: '3.1.${{ matrix.sdk-minor-version }}'
       
     - name: Build
       run: dotnet publish -c Release
       
-    - name: Test
+    - name: Test Run as built-in user
       run: bin/Release/netcoreapp3.1/linux-x64/BundlingIssue
+
+    - name: Test Run as root
+      run: sudo bin/Release/netcoreapp3.1/linux-x64/BundlingIssue
+
+    - name: Create systemd unit
+      run: | 
+        cat <<-EOF | sudo tee /etc/systemd/system/bundlingissue.service >/dev/null
+        [Unit]
+        Description=BundlingIssue
+        After=network.target
+
+        [Service]
+        Environment="COREHOST_TRACE=1"
+        Environment="COREHOST_TRACE_VERBOSITY=4"
+        ExecStart=$PWD/bin/Release/netcoreapp3.1/linux-x64/BundlingIssue
+
+        [Install]
+        WantedBy=multi-user.target
+
+        EOF
+
+    - name: Start Service
+      run: |
+        sudo systemctl enable bundlingissue.service
+        sudo systemctl start bundlingissue.service
+
+    - name: Print Syslog
+      run: |
+        tail -n 50 /var/log/syslog

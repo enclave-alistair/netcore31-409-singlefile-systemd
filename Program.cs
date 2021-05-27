@@ -6,7 +6,8 @@ namespace BundlingIssue
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("AppDirectory: {0}", AppContext.BaseDirectory);
+            Console.WriteLine("User: {0}", Environment.UserName);
         }
     }
 }
