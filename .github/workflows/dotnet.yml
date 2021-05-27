@@ -39,6 +39,8 @@ jobs:
         After=network.target
 
         [Service]
+        Environment="COREHOST_TRACE=1"
+        Environment="DOTNET_BUNDLE_EXTRACT_BASE_DIR=%h/.net/bundling"
         ExecStart=$PWD/bin/Release/netcoreapp3.1/linux-x64/publish/BundlingIssue
 
         [Install]
