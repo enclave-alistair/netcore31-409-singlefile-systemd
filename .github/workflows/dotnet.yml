@@ -53,4 +53,8 @@ jobs:
 
     - name: Print Syslog
       run: |
-        tail -n 50 /var/log/syslog
+        tail -n 20 /var/log/syslog
+
+    - name: Search for 'Start' in syslog
+      run: |
+        cat /var/log/syslog | grep "Started BundlingIssue."
