@@ -22,16 +22,16 @@ jobs:
       with:
         dotnet-version: '3.1.${{ matrix.sdk-minor-version }}'
       
-    - name: Build
+    - name: Build + Publish
       run: dotnet publish -c Release
       
-    - name: Test Run as built-in user
+    - name: Test single file binary runs with normal permissions ok
       run: bin/Release/netcoreapp3.1/linux-x64/publish/BundlingIssue
-
-    - name: Test Run as root
+      
+    - name: Test single file binary runs with root ok
       run: sudo bin/Release/netcoreapp3.1/linux-x64/publish/BundlingIssue
-
-    - name: Create systemd unit
+      
+    - name: Add Systemd Unit File
       run: | 
         cat <<-EOF | sudo tee /etc/systemd/system/bundlingissue.service >/dev/null
         [Unit]
@@ -46,15 +46,15 @@ jobs:
 
         EOF
 
-    - name: Start Service
+    - name: Start Systemd Service
       run: |
         sudo systemctl enable bundlingissue.service
         sudo systemctl start bundlingissue.service
 
-    - name: Print Syslog
+    - name: Print Syslog (for reference)
       run: |
         tail -n 20 /var/log/syslog
 
-    - name: Search for 'Start' in syslog
+    - name: Check if a fatal error occurred in syslog
       run: |
-        cat /var/log/syslog | grep "Started BundlingIssue."
+        cat /var/log/syslog | not grep "A fatal error was encountered. Could not extract contents of the bundle""
