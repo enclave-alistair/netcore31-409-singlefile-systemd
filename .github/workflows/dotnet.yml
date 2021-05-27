@@ -26,10 +26,10 @@ jobs:
       run: dotnet publish -c Release
       
     - name: Test Run as built-in user
-      run: bin/Release/netcoreapp3.1/linux-x64/BundlingIssue
+      run: bin/Release/netcoreapp3.1/linux-x64/publish/BundlingIssue
 
     - name: Test Run as root
-      run: sudo bin/Release/netcoreapp3.1/linux-x64/BundlingIssue
+      run: sudo bin/Release/netcoreapp3.1/linux-x64/publish/BundlingIssue
 
     - name: Create systemd unit
       run: | 
@@ -39,7 +39,7 @@ jobs:
         After=network.target
 
         [Service]
-        ExecStart=$PWD/bin/Release/netcoreapp3.1/linux-x64/BundlingIssue
+        ExecStart=$PWD/bin/Release/netcoreapp3.1/linux-x64/publish/BundlingIssue
 
         [Install]
         WantedBy=multi-user.target
