@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix: 
-        sdk-minor-version: [ 401, 402, 403, 404, 405, 406, 407, 408, 409 ]
+        sdk-minor-version: [ 401, 402, 403, 404, 405, 406, 407, 408, 409, 114, 115 ]
         
     steps:
     - uses: actions/checkout@v2
